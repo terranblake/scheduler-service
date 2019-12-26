@@ -2,7 +2,9 @@ const moment = require('moment');
 
 const models = require('@postilion/models');
 
-const hour = 1000 * 60 * 60;
+const second = 1000;
+const minute = second * 60;
+const hour = minute * 60;
 
 module.exports = [
 	{
@@ -19,7 +21,7 @@ module.exports = [
 		options: {
 			repeat: {
 				every: hour,
-				limit: 1
+				limit: 1000
 			}
 		}
 	}
