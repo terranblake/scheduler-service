@@ -9,7 +9,7 @@ const hour = minute * 60;
 module.exports = [
 	{
 		// keep filings updated by finding all companies
-		// who were last synced at least 30 minutes ago
+		// who were last synced more than 30 minutes ago
 		name: 'SyncAllCompanyFilings',
 		queue: 'SyncFilingsByTicker',
 		model: models.Company,
