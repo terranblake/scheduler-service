@@ -11,7 +11,7 @@ async function createRecurringJobs() {
 		const scheduleQueue = new Queue(queue);
 
 		const documents = await model.find(query);
-		logger.info(`found ${documents.length} jobs for ${queue} for model ${model.modelName}`);
+		logger.info(`found ${documents.length} recurring jobs for ${queue} for model ${model.modelName}`);
 
 		for (let document of documents) {
 			scheduleQueue.add(document);
@@ -24,7 +24,7 @@ async function createScheduledEvents() {
 		const { model, query, queue, action } = schedule;
 
 		const documents = await model.find(query);
-		logger.info(`found ${documents.length} jobs for ${queue} for model ${model.modelName}`);
+		logger.info(`found ${documents.length} scheduled events for ${queue} with action type ${action.type} for model ${model.modelName}`);
 
 		for (let document of documents) {
 			switch (action.type) {
