@@ -1,5 +1,6 @@
-const models = require('@postilion/models');
+const moment = require('moment');
 
+const models = require('@postilion/models');
 const { second } = require('../utils/units-of-time');
 
 module.exports = [
@@ -9,14 +10,12 @@ module.exports = [
 		queue: 'ScheduledEvents',
 		model: models.Event,
 		query: {
-			$match: {
-				// make sure this is a scheduled event
-				date: {
-					$exists: true
-				},
-				// make sure that the event hasn't already been scheduled
-				scheduledAt: false,
+			// make sure this is a scheduled event
+			date: {
+				$exists: true
 			},
+			// make sure that the event hasn't already been scheduled
+			scheduledAt: undefined,
 			// we want to look at events that were supposed to be scheduled
 			// that we might have missed or events in the near future that need to be processed
 			// with priority going to events that are happening in the future because we don't
@@ -51,6 +50,7 @@ module.exports = [
 		options: {
 			repeat: {
 				every: second * 15,
+				limit: 10000
 			}
 		}
 	},

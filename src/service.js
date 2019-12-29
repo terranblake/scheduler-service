@@ -12,16 +12,12 @@ async function createJobsFromSchedules() {
 		const documents = await model.find(query);
 		logger.info(`found ${documents.length} jobs for ${queue} for model ${model.modelName}`);
 
-		if (!action) {
-			for (let document of documents) {
-				if (!action) {
-					scheduleQueue.add(document);
-				} else {
-					await handleScheduledAction(mode, document, action);
-				}
+		for (let document of documents) {
+			if (!action) {
+				scheduleQueue.add(document);
+			} else {
+				await handleScheduledAction(model, document, action);
 			}
-
-			continue;
 		}
 	}
 }
