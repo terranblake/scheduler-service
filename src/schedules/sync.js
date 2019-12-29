@@ -1,11 +1,7 @@
 const moment = require('moment');
 
 const models = require('@postilion/models');
-
-const second = 1000;
-const minute = second * 60;
-const hour = minute * 60;
-const day = hour * 24;
+const { hour, day } = require('../utils/units-of-time');
 
 module.exports = [
 	{
@@ -14,6 +10,8 @@ module.exports = [
 		queue: 'SyncFilingsByTicker',
 		model: models.Company,
 		query: {
+			// we want all companies who haven't been synced in the
+			// past 30 minutes or haven't been synced EVER
 			$or: [
 				{
 					'stats.lastSyncedFilingsAt': {
@@ -39,6 +37,8 @@ module.exports = [
 		queue: 'SyncCompanyEarningsEvents',
 		model: models.Company,
 		query: {
+			// we want all companies who haven't been synced in the
+			// past 1 day or haven't been synced EVER
 			$or: [
 				{
 					'stats.lastSyncedEarningsAt': {

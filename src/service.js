@@ -5,16 +5,35 @@ const schedules = require('./schedules');
 
 async function createJobsFromSchedules() {
 	for (let schedule of schedules) {
-		const { model, query, queue } = schedule;
+		const { model, query, queue, action } = schedule;
 
 		const scheduleQueue = new Queue(queue);
 
 		const documents = await model.find(query);
-		logger.info(`creating ${documents.length} jobs for queue ${queue} for model ${model.modelName}`);
+		logger.info(`found ${documents.length} jobs for ${queue} for model ${model.modelName}`);
 
-		for (let document of documents) {
-			scheduleQueue.add(document);
+		if (!action) {
+			for (let document of documents) {
+				if (!action) {
+					scheduleQueue.add(document);
+				} else {
+					await handleScheduledAction(mode, document, action);
+				}
+			}
+
+			continue;
 		}
+	}
+}
+
+async function handleScheduledAction(model, document, { type, data }) {
+	switch (type) {
+		case 'update':
+			await model.findOneAndUpdate({ _id: document._id }, data);
+			break;
+		default:
+			throw new Error(`the action type ${type} is not supported. please use a different action type`);
+			break;
 	}
 }
 
