@@ -1,4 +1,8 @@
-module.exports = [
-	...require('./events'),
-	...require('./sync')
-]
+module.exports = {
+	scheduledEvents: [
+		...require('./events')
+	],
+	recurringJobs: [
+		...require('./sync')
+	]
+}

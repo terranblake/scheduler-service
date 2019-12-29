@@ -1,11 +1,12 @@
 const { Queue } = require('@postilion/pubsub');
 const { logger } = require('@postilion/utils');
 
-const schedules = require('./schedules');
+const { second } = require('./utils/units-of-time');
+const { recurringJobs, scheduledEvents } = require('./schedules');
 
-async function createJobsFromSchedules() {
-	for (let schedule of schedules) {
-		const { model, query, queue, action } = schedule;
+async function createRecurringJobs() {
+	for (let schedule of recurringJobs) {
+		const { model, query, queue } = schedule;
 
 		const scheduleQueue = new Queue(queue);
 
@@ -13,24 +14,38 @@ async function createJobsFromSchedules() {
 		logger.info(`found ${documents.length} jobs for ${queue} for model ${model.modelName}`);
 
 		for (let document of documents) {
-			if (!action) {
-				scheduleQueue.add(document);
-			} else {
-				await handleScheduledAction(model, document, action);
-			}
+			scheduleQueue.add(document);
 		}
 	}
 }
 
-async function handleScheduledAction(model, document, { type, data }) {
-	switch (type) {
-		case 'update':
-			await model.findOneAndUpdate({ _id: document._id }, data);
-			break;
-		default:
-			throw new Error(`the action type ${type} is not supported. please use a different action type`);
-			break;
+async function createScheduledEvents() {
+	for (let schedule of scheduledEvents) {
+		const { model, query, queue, action } = schedule;
+
+		const documents = await model.find(query);
+		logger.info(`found ${documents.length} jobs for ${queue} for model ${model.modelName}`);
+
+		for (let document of documents) {
+			switch (action.type) {
+				case 'update':
+					await model.findOneAndUpdate({ _id: document._id }, action.data);
+					break;
+				default:
+					throw new Error(`the action type ${action.type} is not supported. please use a different action type`);
+					break;
+			}
+		}
 	}
+
+	loop();
 }
 
-createJobsFromSchedules()
+function loop() {
+	setTimeout(() => {
+		createScheduledEvents();
+	}, second * 15)
+}
+
+createScheduledEvents()
+createRecurringJobs()
