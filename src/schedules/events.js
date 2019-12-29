@@ -25,13 +25,13 @@ module.exports = [
 			$or: [
 				{
 					date: {
-						// subtract a minute to make sure that all events are being processed
+						// subtract a few seconds to make sure that all events are being processed
 						$gt: moment().subtract(15, 'second').toDate()
 					}
 				},
 				{
 					date: {
-						// subtract a minute to make sure that all 
+						// add a minute to schedule a few jobs early
 						$lt: moment().add(1, 'minute').toDate()
 					}
 				}
