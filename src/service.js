@@ -6,15 +6,15 @@ const { recurringJobs, scheduledEvents } = require('./schedules');
 
 async function createRecurringJobs() {
 	for (let schedule of recurringJobs) {
-		const { model, query, queue } = schedule;
+		const { model, query, queue, options } = schedule;
 
-		const scheduleQueue = new Queue(queue);
+		const scheduleQueue = new Queue(queue, options);
 
 		const documents = await model.find(query);
 		logger.info(`found ${documents.length} recurring jobs for ${queue} for model ${model.modelName}`);
 
 		for (let document of documents) {
-			scheduleQueue.add(document);
+			scheduleQueue.add(document, );
 		}
 	}
 }
