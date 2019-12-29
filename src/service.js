@@ -1,4 +1,4 @@
-const { Queue } = require('@postilion/pubsub');
+const { Operation, Queue } = require('@postilion/pubsub');
 const { logger } = require('@postilion/utils');
 
 const { second } = require('./utils/units-of-time');
@@ -28,7 +28,7 @@ async function createScheduledEvents() {
 
 		for (let document of documents) {
 			switch (action.type) {
-				case 'update':
+				case Operation.update:
 					await model.findOneAndUpdate({ _id: document._id }, action.data);
 					break;
 				default:

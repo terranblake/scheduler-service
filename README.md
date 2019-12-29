@@ -44,7 +44,7 @@ For each `schedule`, define an object like:
 		// which should trigger a change stream update which will allow
 		// all services to listen for when an Event with a specific set
 		// of fields has been triggered and needs to be processed
-		type: 'update',
+		type: Operation.update,
 		data: {
 			scheduledAt: moment()
 		}

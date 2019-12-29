@@ -1,5 +1,6 @@
 const moment = require('moment');
 
+const { Operation } = require('@postilion/pubsub');
 const models = require('@postilion/models');
 const { second } = require('../utils/units-of-time');
 
@@ -42,7 +43,7 @@ module.exports = [
 			// which should trigger a change stream update which will allow
 			// all services to listen for when an Event with a specific set
 			// of fields has been triggered and needs to be processed
-			type: 'update',
+			type: Operation.update,
 			data: {
 				scheduledAt: moment()
 			}
