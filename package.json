@@ -15,7 +15,7 @@
   "dependencies": {
     "@postilion/pubsub": "github:terranblake/pubsub",
     "@postilion/models": "github:terranblake/models",
-    "@postilion/storage": "github:terranblake/storage",
+    "@postilion/stores": "github:terranblake/stores",
     "@postilion/utils": "github:terranblake/utils",
     "bull": "^3.12.1",
     "moment": "^2.24.0",
