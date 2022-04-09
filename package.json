@@ -18,7 +18,7 @@
     "@postilion/stores": "github:terranblake/stores",
     "@postilion/utils": "github:terranblake/utils",
     "bull": "^3.12.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "nodemon": "^2.0.2"
   }
 }
